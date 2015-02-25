@@ -1,4 +1,4 @@
-import sys,os
+import sys,os,io
 sys.path.insert(1,os.path.join(sys.path[0],'..'))
 import percepclassify as pc
 
@@ -68,7 +68,9 @@ if __name__ == '__main__':
     nerModelFile = sys.argv[1]
     classes,wts,voco = pc.readModel(nerModelFile)
 
-    for line in sys.stdin:
+    inputStream = io.TextIOWrapper(sys.stdin.buffer, errors = 'ignore')
+
+    for line in inputStream:
         predList = nerClassify(classes,wts,voco,line)
         writeOutput(predList,line)
 
