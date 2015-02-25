@@ -22,10 +22,10 @@ Part 3 : NER Classifier
 
 Precision, Recall, F-Score - Pending
 
-Part 4 : POS/NER using Naive - Bayes Classifier
+Part 4 : POS/NER using Naive - Baye's Classifier
 ------------------------------------------------------------------
 
 The accuracy is almost similar to using a perceptron based classifier but lesser than the perceptron learning algorithm.
 
-Overall Accuracy = 93.54 % (POS)
-Overall Accuracy = 91.94 % (NER)
+Overall Accuracy = 91.94 % (POS)
+Overall Accuracy = 89.95 % (NER)
