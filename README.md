@@ -11,18 +11,20 @@ Tested on Spam/Ham datasets.
 Part 2 : POS Tagger
 ----------------------------
 
-          Overall Accuracy = 95.85 % (best)
-          Overall Accuracy = 94.85 % (average)
+          Overall Accuracy = 95.85 % 
+          
 
 
 Part 3 : NER Classifier
 -------------------------------
 
-           Overall Accuracy = 95.15 % (best)
-           Overall Accuracy = 93.96 % (average)
+           Overall Accuracy = 95.15 % 
 
 Precision, Recall, F-Score - Pending
 
+Part 4 : POS/NER using Naive - Bayes Classifier
+------------------------------------------------------------------
 
+The accuracy is almost similar to using a perceptron based classifier but lesser than the perceptron learning algorithm.
 
-
+Overall Accuracy = 93.54 % (using NB classifier)
