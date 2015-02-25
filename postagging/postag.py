@@ -2,31 +2,45 @@ import sys,os
 sys.path.insert(1,os.path.join(sys.path[0],'..'))
 import percepclassify as pc
 
+preds = "^cla$$"
+
+def getSuffix(word,type):
+    wlen = len(word)
+    return word[wlen-type:wlen]
+
 def formatPOSTestInput(inLine):
+    global preds
     out = []
     tr = inLine.split()
     splitLength = len(tr)
     prevWord = "^bos$"
-
+    
     for i in range(splitLength):
         tagLine = ""
         outTagLine = ""
+        prevClass = preds
+        
         curWord = str(tr[i])
+        suffix2 = getSuffix(curWord,2)
+        suffix3 = getSuffix(curWord,3)
+        
         if i == splitLength -1:
             nextWord = "^eos$"
         else:
             nextWord = str(tr[i+1])
 
-        tagLine += " " + "prev:" + prevWord + " " +"cur:"+ curWord +" "+ "next:"+nextWord
+        tagLine += " "+"prev:"+prevWord+" " +"cur:"+ curWord +" "+ "suffix2:" +suffix2+" "+"suffix3:"+suffix3+" " + "next:"+nextWord
         outTagLine = tagLine
         out.append(outTagLine + "\n")
 
         # shift words;
         prevWord = curWord
+        prevClass = preds
 
     return out
 
 def posClassify(classes,wts,voco,testLine):
+    global preds
     predict = []
     testList = formatPOSTestInput(testLine)
     for createdLine in testList:

@@ -2,14 +2,19 @@ import sys,os
 sys.path.insert(1,os.path.join(sys.path[0],'..'))
 import perceplearn as learn
 
+def getSuffix(word,type):
+    wlen = len(word)
+    return word[wlen-type:wlen]
+
 def formatNER(train):
-    tr = open(train,'r',encoding='utf-8', errors='ignore')
+    tr = open(train,'r',encoding='iso-8859-1')
     out = []
 
     for line in tr:
         splitLine = line.split()
         splitLength = len(splitLine)
         prevWord = "^bos$"
+        prevClass = "^cla$$"
         curWord = ""
         nextWord = ""
         classLabel = ""
@@ -21,6 +26,8 @@ def formatNER(train):
             curPair = splitLine[i].split("/")
             classLabel = str(curPair[2])
             curWord = str(curPair[0]) + "/" +str(curPair[1])
+            suffix2 = getSuffix(curWord,2)
+            suffix3 = getSuffix(curWord,3)
 
             # handle next;
             if (i  == splitLength - 1):
@@ -30,12 +37,13 @@ def formatNER(train):
                 nextWord = str(nextPair[0]) + "/" +str(nextPair[1])
 
             # create outTagLine and write;
-            tagLine += " " + "prev:" + prevWord + " " +"cur:"+ curWord +" "+ "next:"+nextWord
+            tagLine += " " + "prev:" + prevWord+" " +"cur:"+ curWord +" "+"suffix2:"+suffix2+" "+"suffix3:"+suffix3+" "+ "next:"+nextWord
             outTagLine = classLabel + tagLine
             out.append(outTagLine + "\n")
 
             # shift words;
             prevWord = curWord
+            prevClass = classLabel
 
     tr.close()
     return out
