@@ -8,6 +8,20 @@ def getSuffix(word,type):
     wlen = len(word)
     return word[wlen-type:wlen]
 
+
+def getWordShape(word):
+    shape = ""
+    for c in word:
+        if c.isupper():
+            shape += "A"
+        elif c.islower():
+            shape += "a"
+        elif c.isdigit():
+            shape += "d"
+        else:
+            shape += c
+    return shape
+
 def formatNERTestInput(inLine):
     global preds
     out = []
@@ -22,6 +36,7 @@ def formatNERTestInput(inLine):
         curWord = str(tr[i])
         suffix2 = getSuffix(curWord,2)
         suffix3 = getSuffix(curWord,3)
+        wrdShape = getWordShape(curWord)
 
         if i == splitLength -1:
             nextWord = "^eos$"
@@ -51,8 +66,8 @@ def nerClassify(classes,wts,voco,testLine):
 
 def writeOutput(prList,inLine):
     inList = inLine.split()
-    if len(inList) != len(prList):
-        print("GOGOGOGOGO")
+    # if len(inList) != len(prList):
+    #     print("GOGOGOGOGO")
 
     printLine = ""
     for idx in range(len(inList)):

@@ -8,6 +8,19 @@ def getSuffix(word,type):
     wlen = len(word)
     return word[wlen-type:wlen]
 
+def getWordShape(word):
+    shape = ""
+    for c in word:
+        if c.isupper():
+            shape += "A"
+        elif c.islower():
+            shape += "a"
+        elif c.isdigit():
+            shape += "d"
+        else:
+            shape += c
+    return shape
+
 def formatPOSTestInput(inLine):
     global preds
     out = []
@@ -23,13 +36,14 @@ def formatPOSTestInput(inLine):
         curWord = str(tr[i])
         suffix2 = getSuffix(curWord,2)
         suffix3 = getSuffix(curWord,3)
+        wrdShape = getWordShape(curWord)
         
         if i == splitLength -1:
             nextWord = "^eos$"
         else:
             nextWord = str(tr[i+1])
 
-        tagLine += " "+"prev:"+prevWord+" " +"cur:"+ curWord +" "+ "suffix2:" +suffix2+" "+"suffix3:"+suffix3+" " + "next:"+nextWord
+        tagLine += " "+"prev:"+prevWord+" " +"cur:"+ curWord +" "+"wordshape:"+wrdShape+" "+ "suffix2:" +suffix2+" "+"suffix3:"+suffix3+" " + "next:"+nextWord
         outTagLine = tagLine
         out.append(outTagLine + "\n")
 
@@ -52,8 +66,8 @@ def posClassify(classes,wts,voco,testLine):
 def writeOutput(prList,inLine):
     inList = inLine.split()
     
-    if len(inList) != len(prList):
-        print("GOGOGOGOGO")
+    # if len(inList) != len(prList):
+    #     print("GOGOGOGOGO")
 
     printLine = ""
     for idx in range(len(inList)):

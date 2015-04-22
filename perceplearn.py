@@ -26,6 +26,7 @@ def createVocabulary(rfile):
     f = rfile
    
     for line in f:
+        line = line.strip("\n")
         spl = line.split()
         # make vocabulary
         for word in spl[1:]:
@@ -83,8 +84,8 @@ def calculateActivation(ft,wt):
         wcc = wt[clsa]
         dot = 0
         for wrd4 in ft.keys():
-            # fv = ft[wrd4]
-            fv = 1
+            fv = ft[wrd4]
+            # fv = 1
             wv = wcc[wrd4]
             dot += (fv * wv)
         
@@ -97,20 +98,22 @@ def calculateActivation(ft,wt):
     return maxClass
 
 
-def finalAvgWeights(og,cv,cc,epoch):
-
+def finalAvgWeights(og,cv,aw,cc,epoch):
+    avgg_weights = aw
     factor = epoch/cc
 
     for cls1 in og.keys():
         wc = og[cls1]
         cache = cv[cls1]
+
         for wrd3 in wc.keys():
-            wc[wrd3] -= float(cache[wrd3] * factor)
+            cache[wrd3] /= cc
+            avgg_weights[cls1][wrd3] = float(wc[wrd3] - cache[wrd3])
 
-    return og
+    return avgg_weights
 
 
-def learn(vocabulary,w,cw,trainFile,trSize,alpha,epoch):
+def learn(vocabulary,w,cw,awt,trainFile,trSize,alpha,epoch):
     # f = open(trainFile,'r')
     f = trainFile
     c = 1
@@ -128,10 +131,12 @@ def learn(vocabulary,w,cw,trainFile,trSize,alpha,epoch):
                 cachez = cw[z]
                 cachey = cw[y]
                 for wrd1 in feat.keys():
-                    wz[wrd1] -= int(alpha * 1)
-                    wy[wrd1] += int(alpha * 1)
-                    cachez[wrd1] -= (c * 1)
-                    cachey[wrd1] += (c * 1)
+                    fwt = feat[wrd1]
+                    # fwt = 1
+                    wz[wrd1] -= (fwt)
+                    wy[wrd1] += (fwt)
+                    cachez[wrd1] -= (c * fwt)
+                    cachey[wrd1] += (c * fwt)
                 # w[z] = wz
                 # w[y] = wy
                 # ==============================================>>
@@ -148,7 +153,7 @@ def learn(vocabulary,w,cw,trainFile,trSize,alpha,epoch):
                 #=================================================||
                 
             c += 1
-    resModel = finalAvgWeights(w,cw,c,epoch)
+    resModel = finalAvgWeights(w,cw,awt,c,epoch)
     # f.close()
     return resModel
 
@@ -168,7 +173,7 @@ def writeModel(model,vocabulary,modelFile):
 
 if __name__ == '__main__':
     EPOCH = 1
-    ALPHA = 1.01
+    ALPHA = 1
 
     spam_train = sys.argv[1]
     modelFile = sys.argv[2]
@@ -179,9 +184,10 @@ if __name__ == '__main__':
 
     weights = initWeights(vocabulary,classes)
     cacheWeights = initWeights(vocabulary,classes)
+    avg_weights = initWeights(vocabulary,classes)
 
 
-    model = learn(vocabulary,weights,cacheWeights,trainList,trainSize,ALPHA,EPOCH)
+    model = learn(vocabulary,weights,cacheWeights,avg_weights,trainList,trainSize,ALPHA,EPOCH)
 
     writeModel(model,vocabulary,modelFile)
     

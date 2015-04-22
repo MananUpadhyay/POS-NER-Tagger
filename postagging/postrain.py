@@ -6,6 +6,19 @@ def getSuffix(word,type):
     wlen = len(word)
     return word[wlen-type:wlen]
 
+def getWordShape(word):
+    shape = ""
+    for c in word:
+        if c.isupper():
+            shape += "A"
+        elif c.islower():
+            shape += "a"
+        elif c.isdigit():
+            shape += "d"
+        else:
+            shape += c
+    return shape
+
 def formatPOS(train):
     tr = open(train,'r')
     out = []
@@ -30,6 +43,7 @@ def formatPOS(train):
             curWord = str(curPair[0])
             suffix2 = getSuffix(curWord,2)
             suffix3 = getSuffix(curWord,3)
+            wrdShape = getWordShape(curWord)
 
             # handle next;
             if (i  == splitLength - 1):
@@ -39,7 +53,7 @@ def formatPOS(train):
                 nextWord = str(nextPair[0])
 
             # create outTagLine and write;
-            tagLine += " "+"prev:"+prevWord+ " "+"cur:"+ curWord +" "+ "suffix2:" +suffix2+" "+"suffix3:"+suffix3+" " + "next:"+nextWord
+            tagLine += " "+"prev:"+prevWord+ " "+"cur:"+ curWord +" "+"wordshape:"+wrdShape+" "+ "suffix2:" +suffix2+" "+"suffix3:"+suffix3+" " + "next:"+nextWord
             outTagLine = curClassLabel + tagLine
             out.append(outTagLine + "\n")
 
@@ -60,8 +74,9 @@ def posLearn(pos_format_trainList,pos_model_file):
 
     posWeights = learn.initWeights(vocabulary,classes)
     posCache = learn.initWeights(vocabulary,classes)
+    pos_avg_weights = learn.initWeights(vocabulary,classes)
 
-    posModel = learn.learn(vocabulary,posWeights,posCache,trainPOSList,trainSize,ALPHA,EPOCH)
+    posModel = learn.learn(vocabulary,posWeights,posCache,pos_avg_weights,trainPOSList,trainSize,ALPHA,EPOCH)
 
     learn.writeModel(posModel,vocabulary,pos_model_file)
 
