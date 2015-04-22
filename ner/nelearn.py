@@ -64,7 +64,7 @@ def formatNER(train):
 
 def nerLearn(ner_formatted_trainList,ner_model_file):
     ALPHA = 1.0
-    EPOCH = 5
+    EPOCH = 10
     trainNERList = ner_formatted_trainList
 
     vocabulary,classes,trainSize = learn.createVocabulary(trainNERList)

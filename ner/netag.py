@@ -83,7 +83,7 @@ if __name__ == '__main__':
     nerModelFile = sys.argv[1]
     classes,wts,voco = pc.readModel(nerModelFile)
 
-    inputStream = io.TextIOWrapper(sys.stdin.buffer, errors = 'ignore')
+    inputStream = io.TextIOWrapper(sys.stdin.buffer, encoding='ISO-8859-1')
 
     for line in inputStream:
         predList = nerClassify(classes,wts,voco,line)
