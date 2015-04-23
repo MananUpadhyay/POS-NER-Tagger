@@ -53,7 +53,9 @@ def formatPOS(train):
                 nextWord = str(nextPair[0])
 
             # create outTagLine and write;
-            tagLine += " "+"prev:"+prevWord+ " "+"cur:"+ curWord +" "+"wordshape:"+wrdShape+" "+ "suffix2:" +suffix2+" "+"suffix3:"+suffix3+" " + "next:"+nextWord
+            tagLine += " "+"prev:"+prevWord+ " "+"prevClass:" +prevClass+" "+"cur:"+ curWord +" "+"wordshape:"+wrdShape+" "+ "suffix2:" +suffix2+" "+"suffix3:"+suffix3+" " + "next:"+nextWord
+            # tagLine += " "+"prev:"+prevWord+ " "+"prevClass:"+prevClass+" "+"cur:"+ curWord +" "+"wordshape:"+wrdShape+" "+ "next:"+nextWord
+
             outTagLine = curClassLabel + tagLine
             out.append(outTagLine + "\n")
 
@@ -66,7 +68,7 @@ def formatPOS(train):
 
 def posLearn(pos_format_trainList,pos_model_file):
     ALPHA = 1.0
-    EPOCH = 1
+    EPOCH = 5
     trainPOSList = pos_format_trainList
     random.shuffle(trainPOSList)
 
