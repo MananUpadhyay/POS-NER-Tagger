@@ -51,7 +51,7 @@ def formatNER(train):
                 nextWord = str(nextPair[0]) + "/" +str(nextPair[1])
 
             # create outTagLine and write;
-            tagLine += " " + "prev:" + prevWord+" " +"cur:"+ curWord +" "+"suffix2:"+suffix2+" "+"suffix3:"+suffix3+" "+ "next:"+nextWord
+            tagLine += " "+"prev:"+prevWord+" "+"prevClass:" +prevClass+" " +"cur:"+ curWord +" "+"wordshape:"+wrdShape+" "+ "suffix2:" +suffix2+" "+"suffix3:"+suffix3+" " + "next:"+nextWord
             outTagLine = classLabel + tagLine
             out.append(outTagLine + "\n")
 

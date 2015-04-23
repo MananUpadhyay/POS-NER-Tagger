@@ -22,43 +22,73 @@ def getWordShape(word):
             shape += c
     return shape
 
-def formatNERTestInput(inLine):
+# def formatNERTestInput(inLine):
+#     global preds
+#     out = []
+#     tr = inLine.split()
+#     splitLength = len(tr)
+#     prevWord = "^bos$"
+
+#     for i in range(splitLength):
+#         prevClass = preds
+#         tagLine = ""
+#         outTagLine = ""
+#         curWord = str(tr[i])
+#         suffix2 = getSuffix(curWord,2)
+#         suffix3 = getSuffix(curWord,3)
+#         wrdShape = getWordShape(curWord)
+
+#         if i == splitLength -1:
+#             nextWord = "^eos$"
+#         else:
+#             nextWord = str(tr[i+1])
+
+#         tagLine += " " + "prev:" + prevWord+" "+"cur:"+ curWord +" "+"suffix2:"+suffix2+" "+"suffix3:"+suffix3+" "+ "next:"+nextWord
+#         outTagLine = tagLine
+#         # print(outTagLine)
+#         out.append(outTagLine + "\n")
+
+#         # shift words;
+#         prevWord = curWord
+#         prevClass = preds
+
+#     return out
+
+def formatNerTestInputNew(word_index,lineList):
     global preds
-    out = []
-    tr = inLine.split()
-    splitLength = len(tr)
-    prevWord = "^bos$"
+    prevClass = preds
+    tagLine = ""
+    outTagLine = ""
 
-    for i in range(splitLength):
-        prevClass = preds
-        tagLine = ""
-        outTagLine = ""
-        curWord = str(tr[i])
-        suffix2 = getSuffix(curWord,2)
-        suffix3 = getSuffix(curWord,3)
-        wrdShape = getWordShape(curWord)
+    curWord = str(lineList[word_index])
+    suffix2 = getSuffix(curWord,2)
+    suffix3 = getSuffix(curWord,3)
+    wrdShape = getWordShape(curWord)
+    
+    if(word_index == 0):
+        prevWord = "^bos$"
+    else:
+        prevWord = str(lineList[word_index- 1])
 
-        if i == splitLength -1:
-            nextWord = "^eos$"
-        else:
-            nextWord = str(tr[i+1])
+    if (word_index == (len(lineList) -1)):
+        nextWord = "^eos$"
+    else:
+        nextWord = str(lineList[word_index + 1])
 
-        tagLine += " " + "prev:" + prevWord+" "+"cur:"+ curWord +" "+"suffix2:"+suffix2+" "+"suffix3:"+suffix3+" "+ "next:"+nextWord
-        outTagLine = tagLine
-        # print(outTagLine)
-        out.append(outTagLine + "\n")
+    # tagLine += " "+"prev:"+prevWord+" " +"prevClass:" +prevClass+" "+"cur:"+ curWord +" "+"wordshape:"+wrdShape+" "+ " " + "next:"+nextWord
+    tagLine += " "+"prev:"+prevWord+" "+"prevClass:" +prevClass+" " +"cur:"+ curWord +" "+"wordshape:"+wrdShape+" "+ "suffix2:" +suffix2+" "+"suffix3:"+suffix3+" " + "next:"+nextWord
+    outTagLine = tagLine
 
-        # shift words;
-        prevWord = curWord
-        prevClass = preds
-
-    return out
+    return outTagLine
 
 def nerClassify(classes,wts,voco,testLine):
     global preds
     predict = []
-    testList = formatNERTestInput(testLine)
-    for createdLine in testList:
+    # testList = formatNERTestInput(testLine)
+    testList = testLine.split()
+    # for createdLine in testList:
+    for windx in range(len(testList)):
+        createdLine = formatNerTestInputNew(windx,testList)
         preds = pc.classify(classes,wts,voco,createdLine)
         predict.append(preds)
         
